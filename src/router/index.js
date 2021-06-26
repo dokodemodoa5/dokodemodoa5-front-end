@@ -19,6 +19,22 @@ const routes = [
     component: function () {
       return import(/* webpackChunkName: "about" */ '../views/About.vue')
     }
+  },
+  {
+    path: '/defi',
+    name: 'Defi',
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/Defi.vue')
+    },
+    // children: [
+    //   {
+    //     path: '/uniswap3-testing',
+    //     name: 'Uniswap3Testing',
+    //     component: function () {
+    //       return import('../views/Uniswap3Testing.vue')
+    //     }
+    //   },
+    // ]
   }
 ]
 
