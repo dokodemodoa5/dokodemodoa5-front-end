@@ -61,8 +61,10 @@ export default {
   },
   mounted() {
     let symbols = "";
-    this.cryptocurrencies.forEach((element) => {
-      symbols += `${element.name},`;
+    this.cryptocurrencies.forEach((element, index) => {
+      symbols += `${element.name}${
+        index == this.cryptocurrencies.length - 1 ? "" : ","
+      }`;
     });
     const vm = this;
     axios
