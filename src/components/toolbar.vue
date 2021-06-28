@@ -26,11 +26,11 @@
 
         &ensp;
 
-        <v-btn plain text @click="render('/Blockchain')">
+        <v-btn plain text @click="render('Blockchain')">
           <span>Blockchain</span>
         </v-btn>
         |
-        <v-btn plain text @click="render('/Layer2')">
+        <v-btn plain text @click="render('Layer2')">
           <span>Layer2</span>
         </v-btn>
         |

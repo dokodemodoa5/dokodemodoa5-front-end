@@ -13,6 +13,13 @@ const routes = [
       title: 'Dokodemodoa | The Explorer'}
   },
   {
+    path: '/Blockchain',
+    name: 'Blockchain',
+    component: () => import("@/views/Blockchain"),
+    meta: {
+      title: 'Blockchain | The Explorer'}
+  },
+  {
     path: '/Test',
     name: 'Test',
     component: function () {

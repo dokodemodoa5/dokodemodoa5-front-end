@@ -266,8 +266,5 @@ export default {
       });
     },
   },
-  created: function () {
-    this.getUniSwapData();
-  },
 };
 </script>
