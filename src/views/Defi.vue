@@ -26,37 +26,37 @@ export default {
         {
           text: "Name",
           align: "center",
-          value: "name"
+          value: "name",
         },
         {
           text: "Price",
           align: "center",
-          value: "price"
-        }
+          value: "price",
+        },
       ],
       cryptocurrencies: [
         { name: "UNI", price: 0 },
         { name: "BTC", price: 0 },
-        { name: "ETH", price: 0 }
+        { name: "ETH", price: 0 },
       ],
       headers_uniswap: [
         {
           text: "Name",
           align: "center",
-          value: "name"
+          value: "name",
         },
         {
           text: "Symbol",
           align: "center",
-          value: "symbol"
+          value: "symbol",
         },
         {
           text: "TVL",
           align: "center",
-          value: "totalValueLocked"
-        }
+          value: "totalValueLocked",
+        },
       ],
-      content_uniswap: []
+      content_uniswap: [],
     };
   },
   mounted() {
@@ -72,8 +72,8 @@ export default {
         `http://localhost:8080/api/v1/cryptocurrency/quotes/latest?symbol=${symbols}`,
         {
           headers: {
-            "X-CMC_PRO_API_KEY": "b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c"
-          }
+            "X-CMC_PRO_API_KEY": "bb3d4de0-b5a5-44df-8491-6b6317f17c62",
+          },
         }
       )
       .then((response) => {
@@ -94,16 +94,16 @@ export default {
     totalValueLocked
   }
 }`,
-        variables: {}
+        variables: {},
       });
 
       var config = {
         method: "post",
         url: "https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v3-testing",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        data: data
+        data: data,
       };
 
       axios(config)
@@ -113,7 +113,7 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
-    }
-  }
+    },
+  },
 };
 </script>

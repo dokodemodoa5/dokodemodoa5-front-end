@@ -1,0 +1,57 @@
+<template>
+  <!-- <div style="background: #de699e; border-bottom: 1px solid black"> -->
+  <div>
+    <v-toolbar class="elevation-0" color="rgb(255,255,255,0)">
+      <a @click="render('Home')">
+        <v-img
+          class="mx-2"
+          src="@/assets/logo.png"
+          max-height="150"
+          max-width="150"
+          contain
+        ></v-img>
+      </a>
+
+      <v-spacer></v-spacer>
+      <v-menu open-on-hover offset-x>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon color="#de699e" v-bind="attrs" v-on="on">mdi-earth</v-icon>
+        </template>
+        <v-list style="text-align: center">
+          <v-list-item-group>
+            <v-list-item v-for="(lang_index, i) in lang" :key="i">
+              <v-list-item-content @click="render(lang_index.url)">
+                <v-list-item-title
+                  v-text="lang_index.name"
+                  class="btn_text"
+                ></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-menu>
+    </v-toolbar>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "toolbar",
+
+  data: () => ({
+    lang: [
+      { name: "繁體中文", url: "" },
+      { name: "English", url: "" },
+    ],
+  }),
+  methods: {
+    render(path_url) {
+      console.log(path_url);
+      this.$router.push({ name: path_url });
+    },
+  },
+  created: function () {},
+  computed: {},
+  watch: {},
+};
+</script>
