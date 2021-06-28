@@ -28,6 +28,8 @@
             <v-btn dark outlined plain @click="getIdleFinanceData"
               >Idle Finance</v-btn
             >
+            &ensp;
+            <v-btn dark outlined plain @click="getEthereumData">Ethereum</v-btn>
           </v-row>
 
           <br />
@@ -65,10 +67,11 @@ import toolbar from "../components/toolbar";
 import axios from "axios";
 import { getPrices } from "../modules/price";
 import * as defi from "../modules/defi";
+import * as blockchain from "../modules/blockchain";
 export default {
   name: "Defi",
   components: {
-    toolbar,
+    toolbar
   },
   data() {
     return {
@@ -76,7 +79,7 @@ export default {
       search_item: "",
 
       headers: [],
-      content: [],
+      content: []
     };
   },
   mounted() {
@@ -94,18 +97,18 @@ export default {
           {
             text: "Name",
             align: "center",
-            value: "name",
+            value: "name"
           },
           {
             text: "Symbol",
             align: "center",
-            value: "symbol",
+            value: "symbol"
           },
           {
             text: "TVL",
             align: "center",
-            value: "totalValueLocked",
-          },
+            value: "totalValueLocked"
+          }
         ];
         this.content = result;
       });
@@ -119,13 +122,13 @@ export default {
           {
             text: "Name",
             align: "center",
-            value: "name",
+            value: "name"
           },
           {
             text: "Symbol",
             align: "center",
-            value: "symbol",
-          },
+            value: "symbol"
+          }
         ];
         this.content = result;
       });
@@ -139,23 +142,23 @@ export default {
           {
             text: "Name",
             align: "center",
-            value: "name",
+            value: "name"
           },
           {
             text: "Symbol",
             align: "center",
-            value: "symbol",
+            value: "symbol"
           },
           {
             text: "TotalBorrows",
             align: "center",
-            value: "totalBorrows",
+            value: "totalBorrows"
           },
           {
             text: "TotalSupply",
             align: "center",
-            value: "totalSupply",
-          },
+            value: "totalSupply"
+          }
         ];
         this.content = result;
       });
@@ -169,13 +172,13 @@ export default {
           {
             text: "RewardAmount",
             align: "center",
-            value: "rewardAmount",
+            value: "rewardAmount"
           },
           {
             text: "Timestamp",
             align: "center",
-            value: "timestamp",
-          },
+            value: "timestamp"
+          }
         ];
         this.content = result.projectRewards;
       });
@@ -189,18 +192,18 @@ export default {
           {
             text: "RewardPerMPHPerSecond",
             align: "center",
-            value: "rewardPerMPHPerSecond",
+            value: "rewardPerMPHPerSecond"
           },
           {
             text: "RewardPerSecond",
             align: "center",
-            value: "rewardPerSecond",
+            value: "rewardPerSecond"
           },
           {
             text: "TotalHistoricalReward",
             align: "center",
-            value: "totalHistoricalReward",
-          },
+            value: "totalHistoricalReward"
+          }
         ];
         this.content = result;
       });
@@ -219,18 +222,18 @@ export default {
           {
             text: "LBalance",
             align: "center",
-            value: "lBalance",
+            value: "lBalance"
           },
           {
             text: "PBalance",
             align: "center",
-            value: "pBalance",
+            value: "pBalance"
           },
           {
             text: "PInterestSum",
             align: "center",
-            value: "pInterestSum",
-          },
+            value: "pInterestSum"
+          }
         ];
         this.content = result;
       });
@@ -244,27 +247,32 @@ export default {
           {
             text: "Name",
             align: "center",
-            value: "name",
+            value: "name"
           },
           {
             text: "LastPrice",
             align: "center",
-            value: "lastPrice",
+            value: "lastPrice"
           },
           {
             text: "TotalSupply",
             align: "center",
-            value: "totalSupply",
+            value: "totalSupply"
           },
           {
             text: "Decimals",
             align: "center",
-            value: "decimals",
-          },
+            value: "decimals"
+          }
         ];
         this.content = result;
       });
     },
-  },
+    getEthereumData() {
+      Promise.resolve(blockchain.getRecentBlocks(1)).then((result) => {
+        console.log(result);
+      });
+    }
+  }
 };
 </script>

@@ -1,5 +1,7 @@
 # dokodemodoa5-front-end
 
+cp .env.example .env
+
 ## Project setup
 ```
 yarn install
