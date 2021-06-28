@@ -6,7 +6,15 @@
       :items-per-page="5"
       class="elevation-1"
     ></v-data-table>
-    <v-btn @click="getUNIData">get uniswap</v-btn>
+    <v-btn @click="getUniSwapData">get UNISWAP</v-btn>
+    <v-btn @click="getUmaData">get UMA</v-btn>
+    <v-btn @click="getCompoundData">get COMPOUND</v-btn>
+    <v-btn @click="getNexusData">get Nexus Mutual</v-btn>
+    <v-btn @click="get88MphData">get 88MPH</v-btn>
+    <v-btn @click="getLiquityData">get Liquity</v-btn>
+    <v-btn @click="getAkropolisData">get Akropolis</v-btn>
+    <v-btn @click="getIdleFinanceData">get Idle Finance</v-btn>
+
     <v-data-table
       :headers="headers_uniswap"
       :items="content_uniswap"
@@ -18,6 +26,8 @@
 
 <script>
 import axios from "axios";
+import { getPrices } from "../modules/price";
+import * as defi from "../modules/defi";
 export default {
   name: "Defi",
   data() {
@@ -26,94 +36,96 @@ export default {
         {
           text: "Name",
           align: "center",
-          value: "name",
+          value: "name"
         },
         {
           text: "Price",
           align: "center",
-          value: "price",
-        },
+          value: "price"
+        }
       ],
       cryptocurrencies: [
-        { name: "UNI", price: 0 },
         { name: "BTC", price: 0 },
         { name: "ETH", price: 0 },
+        { name: "RARI", price: 0 },
+        { name: "MATIC", price: 0 },
+        { name: "UNI", price: 0 },
+        { name: "AAVE", price: 0 },
+        { name: "1INCH", price: 0 },
+        { name: "UMA", price: 0 },
+        { name: "COMP", price: 0 },
+        { name: "NXM", price: 0 },
+        { name: "MPH", price: 0 },
+        { name: "LQTY", price: 0 },
+        { name: "AKRO", price: 0 },
+        { name: "IDLE", price: 0 }
       ],
       headers_uniswap: [
         {
           text: "Name",
           align: "center",
-          value: "name",
+          value: "name"
         },
         {
           text: "Symbol",
           align: "center",
-          value: "symbol",
+          value: "symbol"
         },
         {
           text: "TVL",
           align: "center",
-          value: "totalValueLocked",
-        },
+          value: "totalValueLocked"
+        }
       ],
-      content_uniswap: [],
+      content_uniswap: []
     };
   },
   mounted() {
-    let symbols = "";
-    this.cryptocurrencies.forEach((element, index) => {
-      symbols += `${element.name}${
-        index == this.cryptocurrencies.length - 1 ? "" : ","
-      }`;
+    Promise.resolve(getPrices(this.cryptocurrencies)).then((result) => {
+      console.log(result);
     });
-    const vm = this;
-    axios
-      .get(
-        `http://localhost:8080/api/v1/cryptocurrency/quotes/latest?symbol=${symbols}`,
-        {
-          headers: {
-            "X-CMC_PRO_API_KEY": "bb3d4de0-b5a5-44df-8491-6b6317f17c62",
-          },
-        }
-      )
-      .then((response) => {
-        vm.cryptocurrencies.forEach((element) => {
-          element.price = response.data.data[element.name].quote.USD.price;
-        });
-      });
   },
   methods: {
-    getUNIData() {
-      const vm = this;
-      var data = JSON.stringify({
-        query: `{
-  tokens(first: 10) {
-    id
-    symbol
-    name
-    totalValueLocked
-  }
-}`,
-        variables: {},
+    getUniSwapData() {
+      Promise.resolve(defi.getUniSwapData()).then((result) => {
+        console.log(result);
       });
-
-      var config = {
-        method: "post",
-        url: "https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v3-testing",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-
-      axios(config)
-        .then(function (response) {
-          vm.content_uniswap = response.data.data.tokens;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
     },
-  },
+    getUmaData() {
+      Promise.resolve(defi.getUmaData()).then((result) => {
+        console.log(result);
+      });
+    },
+    getCompoundData() {
+      Promise.resolve(defi.getCompoundData()).then((result) => {
+        console.log(result);
+      });
+    },
+    getNexusData() {
+      Promise.resolve(defi.getNexusData()).then((result) => {
+        console.log(result);
+      });
+    },
+    get88MphData() {
+      Promise.resolve(defi.get88MphData()).then((result) => {
+        console.log(result);
+      });
+    },
+    getLiquityData() {
+      Promise.resolve(defi.getLiquityData()).then((result) => {
+        console.log(result);
+      });
+    },
+    getAkropolisData() {
+      Promise.resolve(defi.getAkropolisData()).then((result) => {
+        console.log(result);
+      });
+    },
+    getIdleFinanceData() {
+      Promise.resolve(defi.getIdleFinanceData()).then((result) => {
+        console.log(result);
+      });
+    }
+  }
 };
 </script>
