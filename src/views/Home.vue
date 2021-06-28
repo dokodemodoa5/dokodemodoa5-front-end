@@ -4,82 +4,34 @@
 
     <v-container fluid fill-height>
       <v-row align="center" justify="center" style="text-align: start">
-        <v-col cols="10">
-          <p style="font-size: 2em">Explore Blockchains</p>
+        <div v-if="uniswap != null">
+          <br />
 
-          <!-- blockchain -->
-          <v-row
-            align="center"
-            justify="center"
-            style="text-align: start"
-            :key="i"
-            v-for="i in Math.ceil(blockchain.length / 3)"
-          >
-            <v-col cols="12" md="4" :key="k" v-for="k in 3">
-              <a>
-                <div
-                  class="div_card"
-                  v-if="i * 3 - (3 - k) - 1 < blockchain.length"
-                >
-                  <v-container fill-height>
-                    <v-row
-                      justify="center"
-                      align="center"
-                      style="text-align: center"
-                    >
-                      <span>
-                        {{ blockchain[k - 1 + (i - 1) * 3].name }}
-                        <br />
-                        Price:
-                        {{ blockchain[k - 1 + (i - 1) * 3].price.toFixed(5) }}
-                      </span>
-                    </v-row>
-                  </v-container>
-                </div>
-              </a>
-            </v-col>
-          </v-row>
+          <v-text-field
+            v-model="search_item"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+            outlined
+            dark
+          ></v-text-field>
 
           <br />
 
-          <p style="font-size: 2em">
-            Explore <span style="color: rgb(255, 0, 122)">UNISWAP </span>
-          </p>
-
-          <!-- uniswap -->
-          <v-row
-            align="center"
-            justify="center"
-            style="text-align: start"
-            :key="i"
-            v-for="i in Math.ceil(uniswap.length / 3)"
+          <v-data-table
+            dark
+            :search="search_item"
+            :headers="headers"
+            :items="uniswap"
+            style="width: 80vw; border: 1px solid #de699e"
           >
-            <v-col cols="12" md="4" :key="k" v-for="k in 3">
-              <a>
-                <div
-                  class="div_card"
-                  v-if="i * 3 - (3 - k) - 1 < uniswap.length"
-                >
-                  <v-container fill-height>
-                    <v-row
-                      justify="center"
-                      align="center"
-                      style="text-align: center"
-                    >
-                      <span>
-                        {{ uniswap[k - 1 + (i - 1) * 3].name }}
-                        <br />
-                        Symbol: {{ uniswap[k - 1 + (i - 1) * 3].symbol }}
-                        <br />
-                        TVL: {{ uniswap[k - 1 + (i - 1) * 3].TVL.toFixed(5) }}
-                      </span>
-                    </v-row>
-                  </v-container>
-                </div>
-              </a>
-            </v-col>
-          </v-row>
-        </v-col>
+            <!-- <template v-slot:item.name="{ item }">
+              <a></a>
+            </template> -->
+          </v-data-table>
+        </div>
+        <div v-else><br /><br />{{ "尚無資料...." }}</div>
       </v-row>
     </v-container>
   </div>
@@ -96,11 +48,21 @@ export default {
   },
 
   data: () => ({
-    blockchain: [
-      { name: "UNI", price: 16.17688326284973 },
-      { name: "BTC", price: 33338.84623435097 },
-      { name: "ETH", price: 1856.478730412263 },
+    //
+    search_item: "",
+    // table
+    headers: [
+      { text: "Name", value: "name", align: "left", width: "33%" },
+      { text: "Symbol", value: "symbol", align: "left", width: "33%" },
+      { text: "TLV", value: "TVL", align: "left", width: "34%" },
     ],
+    items: null,
+
+    // blockchain: [
+    //   { name: "UNI", price: 16.17688326284973 },
+    //   { name: "BTC", price: 33338.84623435097 },
+    //   { name: "ETH", price: 1856.478730412263 },
+    // ],
 
     uniswap: [
       { name: "TopBidder", symbol: "BID", TVL: 45.690660599764812617 },
