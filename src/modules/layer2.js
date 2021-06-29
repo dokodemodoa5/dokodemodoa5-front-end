@@ -1,35 +1,45 @@
-import axios from "axios";
+import { ethers } from "ethers";
 
-export const getMaticData = function () {
-    const vm = this;
-    var data = JSON.stringify({
-        query: `{
-            validators(first: 10){
-            id
-            owner
-            totalStaked
-          }
-        }`,
-        variables: {}
-    });
+// chain id
+// Ethereum: 1
+// Polygon: 137
+// Optimism: 10
+const getProvider = function (chainId) {
+    let rpcEndPoint = "";
+    if (chainId == 137) {
+        rpcEndPoint = "https://polygon-mainnet.infura.io/v3/0b82cfff3bb949d8beec6e329fe14d7c";
+    } else if (chainId == 10) {
+        rpcEndPoint = "https://optimism-mainnet.infura.io/v3/0b82cfff3bb949d8beec6e329fe14d7c";
+    }
 
-    var config = {
-        method: "post",
-        url: "https://api.thegraph.com/subgraphs/name/maticnetwork/mainnet-root-subgraphs",
-        headers: {
-            "Content-Type": "application/json"
+    return ethers.getDefaultProvider(rpcEndPoint, {
+        infura: {
+            projectId: process.env.VUE_APP_INFURA_PROJECT_ID,
+            projectSecret: process.env.VUE_APP_INFURA_SECRET,
         },
-        data: data
-    };
+    })
+}
 
+// 取得最新區塊數
+export const getBlockNumber = function (chainId) {
+    const provider = getProvider(chainId);
     return new Promise((resolve, reject) => {
-        axios(config)
-            .then(function (response) {
-                resolve(response.data.data.validators);
-            })
-            .catch(function (error) {
-                console.log(error);
-                reject([])
-            });
-    });
+        resolve(provider.getBlockNumber());
+    })
+}
+
+// 查詢區塊內容
+export const getBlock = function (chainId, blockNumber) {
+    const provider = getProvider(chainId);
+    return new Promise((resolve, reject) => {
+        resolve(provider.getBlock(blockNumber));
+    })
+}
+
+// 查詢交易
+export const getTransaction = function (chainId, txHash) {
+    const provider = getProvider(chainId);
+    return new Promise((resolve, reject) => {
+        resolve(provider.getTransaction(txHash));
+    })
 }

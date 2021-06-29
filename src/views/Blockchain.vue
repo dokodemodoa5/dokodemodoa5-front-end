@@ -1,12 +1,10 @@
 <template>
   <div>
     <toolbar />
-
     <v-container fluid fill-height>
       <v-row align="center" justify="center" style="text-align: start">
         <div v-if="content != null">
           <br />
-
           <v-row align="center" justify="center" style="text-align: start">
             <v-col cols="12">
               <v-slide-group show-arrows dark style="width: 100%">
@@ -161,10 +159,11 @@
 <script>
 import toolbar from "../components/toolbar";
 import * as blockchain from "../modules/blockchain";
+import * as layer2 from "../modules/layer2";
 export default {
   name: "Defi",
   components: {
-    toolbar,
+    toolbar
   },
   data() {
     return {
@@ -181,20 +180,20 @@ export default {
           text: "Height",
           align: "center",
           value: "height",
-          width: "50%",
+          width: "50%"
         },
         {
           text: "Signed_At",
           align: "center",
           value: "signed_at",
-          width: "50%",
-        },
+          width: "50%"
+        }
       ],
       content: [],
 
       // dialog
       dialog: false,
-      detail_item: null,
+      detail_item: null
     };
   },
   methods: {
@@ -246,13 +245,32 @@ export default {
 
       this.dialog = true;
     },
+    test() {
+      Promise.resolve(
+        layer2.getTransaction(
+          137,
+          "0xbfa2d54005e7e22bc3c2017d2acbbee971cd7b16b01f48ef1f8992ac2792078f"
+        )
+      ).then((result) => {
+        console.log(result);
+      });
+    },
+    test2() {
+      Promise.resolve(
+        blockchain.ethereum.getTransaction(
+          "0xf9fc36b52f73cae07c5399064b6c978998bdd62ec3d4f7c090ea7b82ec10e1b4"
+        )
+      ).then((result) => {
+        console.log(result);
+      });
+    }
   },
   created: function () {
     this.getEthereumStatus();
     this.getBinanceStatus();
 
     this.getEthereumData();
-  },
+  }
 };
 </script>
 
