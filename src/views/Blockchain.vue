@@ -8,47 +8,80 @@
           <br />
 
           <v-row align="center" justify="center" style="text-align: start">
-            <v-btn dark outlined plain @click="getUniSwapData">UNISWAP</v-btn>
-            &ensp;
-            <v-btn dark outlined plain @click="getUmaData">UMA</v-btn>
-            &ensp;
-            <v-btn dark outlined plain @click="getCompoundData">COMPOUND</v-btn>
-            &ensp;
-            <v-btn dark outlined plain @click="getNexusData"
-              >Nexus Mutual</v-btn
-            >
-            <v-btn dark outlined plain @click="get88MphData">88MPH</v-btn>
-            &ensp;
-            <v-btn dark outlined plain @click="getLiquityData">Liquity</v-btn>
-            &ensp;
-            <v-btn dark outlined plain @click="getAkropolisData"
-              >Akropolis</v-btn
-            >
-            &ensp;
-            <v-btn dark outlined plain @click="getIdleFinanceData"
-              >Idle Finance</v-btn
-            >
-            &ensp;
-            <v-btn dark outlined plain @click="getEthereumData">Ethereum</v-btn>
+            <v-col cols="12">
+              <v-slide-group show-arrows dark style="width: 100%">
+                <v-btn-toggle mandatory>
+                  <v-btn
+                    v-if="ethereumStatus != null"
+                    class="div_card"
+                    style="height: 120px"
+                    @click="getEthereumData"
+                  >
+                    <span>
+                      Ethereum
+                      <br />
+                      Height: {{ this.ethereumStatus.synced_block_height }}
+                      <br />
+                      Signed_At:
+                      {{ this.ethereumStatus.synced_blocked_signed_at }}
+                    </span>
+                  </v-btn>
+                  <v-btn
+                    v-if="binanceStatus != null"
+                    :value="2"
+                    class="div_card"
+                    style="height: 120px"
+                    @click="getBinanceData"
+                  >
+                    <span>
+                      Binance Smart Chain (BSC)
+                      <br />
+                      Height: {{ this.binanceStatus.synced_block_height }}
+                      <br />
+                      Signed_At:
+                      {{ this.binanceStatus.synced_blocked_signed_at }}
+                    </span>
+                  </v-btn>
+                </v-btn-toggle>
+              </v-slide-group>
+            </v-col>
           </v-row>
 
           <br />
 
-          <v-text-field
-            v-model="search_item"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-            outlined
-            dark
-          ></v-text-field>
+          <v-row align="center" justify="center" style="text-align: start">
+            <v-col cols="8">
+              <v-text-field
+                v-model="search_item"
+                append-icon="mdi-magnify"
+                label="Search transactions..."
+                single-line
+                hide-details
+                outlined
+                dark
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="2">
+              <v-select
+                :items="items"
+                v-model="item"
+                outlined
+                hide-details="auto"
+                dark
+              ></v-select>
+            </v-col>
+            <v-col cols="2">
+              <v-btn width="100%" dark text plain @click="submit">
+                Search
+              </v-btn>
+            </v-col>
+          </v-row>
 
           <br />
 
           <v-data-table
             dark
-            :search="search_item"
             :headers="headers"
             :items="content"
             style="width: 80vw; border: 1px solid #de699e"
@@ -58,221 +91,183 @@
         <div v-else><br /><br />{{ "尚無資料...." }}</div>
       </v-row>
     </v-container>
+
+    <!-- dialog -->
+    <v-dialog max-width="90vw" v-model="dialog" content-class="vdialognew">
+      <div max-width="90vw" style="height: 80vh; background: white">
+        <v-container fluid v-if="detail_item != null">
+          <v-row>
+            <v-col cols="12">
+              <span style="font-size: 1.5em">Transaction Details</span>
+            </v-col>
+
+            <!-- tx_hash -->
+            <v-col cols="5"> Transaction Hash </v-col>
+            <v-col cols="7">
+              {{ detail_item.tx_hash }}
+            </v-col>
+
+            <!-- block_height -->
+            <v-col cols="5"> Block </v-col>
+            <v-col cols="7">
+              {{ detail_item.block_height }}
+            </v-col>
+
+            <!-- successful -->
+            <v-col cols="5"> Status </v-col>
+            <v-col cols="7">
+              <v-icon v-if="detail_item.successful == true" style="color: teal"
+                >mdi-check-circle
+              </v-icon>
+              <v-icon v-else style="color: red">mdi-close </v-icon>
+            </v-col>
+
+            <!-- block_signed_at -->
+            <v-col cols="5"> Timestamp </v-col>
+            <v-col cols="7">
+              {{ detail_item.block_signed_at }}
+            </v-col>
+
+            <!-- value -->
+            <v-col cols="5"> Value </v-col>
+            <v-col cols="7">
+              {{ (detail_item.value * 0.000000000000000001).toFixed(3) }} ETH
+            </v-col>
+
+            <!-- from_address -->
+            <v-col cols="5"> From </v-col>
+            <v-col cols="7">
+              {{ detail_item.from_address }}
+            </v-col>
+
+            <!-- to_address -->
+            <v-col cols="5"> To </v-col>
+            <v-col cols="7">
+              {{ detail_item.to_address }}
+            </v-col>
+
+            <!-- gas_price -->
+            <v-col cols="5"> Gas Price </v-col>
+            <v-col cols="7">
+              {{ detail_item.gas_price * 0.000000001 }} Gwei
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import toolbar from "../components/toolbar";
-
-import axios from "axios";
-import { getPrices } from "../modules/price";
-import * as defi from "../modules/defi";
 import * as blockchain from "../modules/blockchain";
 export default {
   name: "Defi",
   components: {
-    toolbar
+    toolbar,
   },
   data() {
     return {
-      //
-      search_item: "",
+      ethereumStatus: null,
+      binanceStatus: null,
 
-      headers: [],
-      content: []
+      // search
+      search_item: null,
+      items: ["Ethereum", "BSC"],
+      item: "Ethereum",
+
+      headers: [
+        {
+          text: "Height",
+          align: "center",
+          value: "height",
+          width: "50%",
+        },
+        {
+          text: "Signed_At",
+          align: "center",
+          value: "signed_at",
+          width: "50%",
+        },
+      ],
+      content: [],
+
+      // dialog
+      dialog: false,
+      detail_item: null,
     };
   },
-  mounted() {
-    Promise.resolve(getPrices(this.cryptocurrencies)).then((result) => {
-      console.log(result);
-    });
-  },
   methods: {
-    getUniSwapData() {
-      Promise.resolve(defi.getUniSwapData()).then((result) => {
+    getEthereumStatus() {
+      Promise.resolve(blockchain.getChainStatus(1)).then((result) => {
         console.log(result);
 
-        // load data
-        this.headers = [
-          {
-            text: "Name",
-            align: "center",
-            value: "name"
-          },
-          {
-            text: "Symbol",
-            align: "center",
-            value: "symbol"
-          },
-          {
-            text: "TVL",
-            align: "center",
-            value: "totalValueLocked"
-          }
-        ];
-        this.content = result;
+        this.ethereumStatus = result;
       });
     },
-    getUmaData() {
-      Promise.resolve(defi.getUmaData()).then((result) => {
+
+    getBinanceStatus() {
+      Promise.resolve(blockchain.getChainStatus(56)).then((result) => {
         console.log(result);
 
-        // load data
-        this.headers = [
-          {
-            text: "Name",
-            align: "center",
-            value: "name"
-          },
-          {
-            text: "Symbol",
-            align: "center",
-            value: "symbol"
-          }
-        ];
-        this.content = result;
+        this.binanceStatus = result;
       });
     },
-    getCompoundData() {
-      Promise.resolve(defi.getCompoundData()).then((result) => {
-        console.log(result);
 
-        // load data
-        this.headers = [
-          {
-            text: "Name",
-            align: "center",
-            value: "name"
-          },
-          {
-            text: "Symbol",
-            align: "center",
-            value: "symbol"
-          },
-          {
-            text: "TotalBorrows",
-            align: "center",
-            value: "totalBorrows"
-          },
-          {
-            text: "TotalSupply",
-            align: "center",
-            value: "totalSupply"
-          }
-        ];
-        this.content = result;
-      });
-    },
-    getNexusData() {
-      Promise.resolve(defi.getNexusData()).then((result) => {
-        console.log(result);
-
-        // load data
-        this.headers = [
-          {
-            text: "RewardAmount",
-            align: "center",
-            value: "rewardAmount"
-          },
-          {
-            text: "Timestamp",
-            align: "center",
-            value: "timestamp"
-          }
-        ];
-        this.content = result.projectRewards;
-      });
-    },
-    get88MphData() {
-      Promise.resolve(defi.get88MphData()).then((result) => {
-        console.log(result);
-
-        // load data
-        this.headers = [
-          {
-            text: "RewardPerMPHPerSecond",
-            align: "center",
-            value: "rewardPerMPHPerSecond"
-          },
-          {
-            text: "RewardPerSecond",
-            align: "center",
-            value: "rewardPerSecond"
-          },
-          {
-            text: "TotalHistoricalReward",
-            align: "center",
-            value: "totalHistoricalReward"
-          }
-        ];
-        this.content = result;
-      });
-    },
-    getLiquityData() {
-      Promise.resolve(defi.getLiquityData()).then((result) => {
-        console.log(result);
-      });
-    },
-    getAkropolisData() {
-      Promise.resolve(defi.getAkropolisData()).then((result) => {
-        console.log(result);
-
-        // load data
-        this.headers = [
-          {
-            text: "LBalance",
-            align: "center",
-            value: "lBalance"
-          },
-          {
-            text: "PBalance",
-            align: "center",
-            value: "pBalance"
-          },
-          {
-            text: "PInterestSum",
-            align: "center",
-            value: "pInterestSum"
-          }
-        ];
-        this.content = result;
-      });
-    },
-    getIdleFinanceData() {
-      Promise.resolve(defi.getIdleFinanceData()).then((result) => {
-        console.log(result);
-
-        // load data
-        this.headers = [
-          {
-            text: "Name",
-            align: "center",
-            value: "name"
-          },
-          {
-            text: "LastPrice",
-            align: "center",
-            value: "lastPrice"
-          },
-          {
-            text: "TotalSupply",
-            align: "center",
-            value: "totalSupply"
-          },
-          {
-            text: "Decimals",
-            align: "center",
-            value: "decimals"
-          }
-        ];
-        this.content = result;
-      });
-    },
     getEthereumData() {
       Promise.resolve(blockchain.getRecentBlocks(1)).then((result) => {
         console.log(result);
+
+        this.content = result.data.data.items;
       });
-    }
-  }
+    },
+
+    getBinanceData() {
+      Promise.resolve(blockchain.getRecentBlocks(56)).then((result) => {
+        console.log(result);
+
+        this.content = result.data.data.items;
+      });
+    },
+
+    submit() {
+      let chain_id = 1;
+
+      if (this.item === "BSC") {
+        chain_id = 56;
+      }
+
+      Promise.resolve(
+        blockchain.getTransaction(chain_id, this.search_item)
+      ).then((result) => {
+        console.log(result);
+        this.detail_item = result.data.data.items[0];
+      });
+
+      this.dialog = true;
+    },
+  },
+  created: function () {
+    this.getEthereumStatus();
+    this.getBinanceStatus();
+
+    this.getEthereumData();
+  },
 };
 </script>
+
+<style scoped>
+.div_card {
+  background-color: black;
+  width: 40vw;
+  border-radius: 10px;
+  border: 1px solid white;
+
+  color: gray;
+}
+
+.div_card:hover {
+  border: 3px solid #de699e;
+  color: #de699e;
+}
+</style>

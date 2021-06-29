@@ -13,7 +13,7 @@
       </a> -->
 
       <v-row align="center" justify="center" style="text-align: center">
-        <v-btn class="div_btn" depressed rounded @click="render('/Home')">
+        <v-btn class="div_btn" depressed rounded @click="render('Home')">
           <!-- <span>Dokodemodoa</span> -->
           <v-img
             class="mx-2"
