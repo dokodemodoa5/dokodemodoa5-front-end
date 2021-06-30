@@ -20,13 +20,6 @@ const routes = [
       title: 'Blockchain | The Explorer'}
   },
   {
-    path: '/Blockchain',
-    name: 'Blockchain',
-    component: () => import("@/views/Blockchain"),
-    meta: {
-      title: 'Blockchain | The Explorer'}
-  },
-  {
     path: '/Layer2',
     name: 'Layer2',
     component: () => import("@/views/Layer2"),
@@ -39,26 +32,7 @@ const routes = [
     component: function () {
       return import(/* webpackChunkName: "about" */ '../views/Defi.vue')
     },
-    // children: [
-    //   {
-    //     path: '/uniswap3-testing',
-    //     name: 'Uniswap3Testing',
-    //     component: function () {
-    //       return import('../views/Uniswap3Testing.vue')
-    //     }
-    //   },
-    // ]
   },
-  {
-    path: '/Test',
-    name: 'Test',
-    component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/Test.vue')
-    },
-    meta: {
-      title: 'Dokodemodoa'}
-  },
-  
 ]
 
 const router = new VueRouter({

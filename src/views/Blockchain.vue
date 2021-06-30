@@ -3,91 +3,191 @@
     <toolbar />
     <v-container fluid fill-height>
       <v-row align="center" justify="center" style="text-align: start">
-        <div v-if="content != null">
-          <br />
-          <v-row align="center" justify="center" style="text-align: start">
-            <v-col cols="12">
-              <v-slide-group show-arrows style="width: 100%">
-                <v-btn-toggle mandatory>
-                  <v-btn
-                    v-if="ethereumStatus != null"
-                    class="div_card"
-                    style="height: 120px"
-                    @click="getEthereumData"
-                  >
-                    <span>
-                      Ethereum
-                      <br />
-                      Height: {{ this.ethereumStatus.synced_block_height }}
-                      <br />
-                      Signed_At:
-                      {{ this.ethereumStatus.synced_blocked_signed_at }}
-                    </span>
-                  </v-btn>
-                  <v-btn
-                    v-if="binanceStatus != null"
-                    :value="2"
-                    class="div_card"
-                    style="height: 120px"
-                    @click="getBinanceData"
-                  >
-                    <span>
-                      Binance Smart Chain (BSC)
-                      <br />
-                      Height: {{ this.binanceStatus.synced_block_height }}
-                      <br />
-                      Signed_At:
-                      {{ this.binanceStatus.synced_blocked_signed_at }}
-                    </span>
-                  </v-btn>
-                </v-btn-toggle>
-              </v-slide-group>
-            </v-col>
-          </v-row>
-
-          <br />
-
-          <v-row align="center" justify="center" style="text-align: start">
-            <v-col cols="8">
-              <v-text-field
-                v-model="search_item"
-                append-icon="mdi-magnify"
-                label="Search transactions..."
-                single-line
-                hide-details
-                outlined
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="2">
-              <v-select
-                :items="items"
-                v-model="item"
-                outlined
-                hide-details="auto"
-              ></v-select>
-            </v-col>
-            <v-col cols="2">
-              <v-btn width="100%" text plain @click="submit"> Search </v-btn>
-            </v-col>
-          </v-row>
-
-          <br />
-
-          <v-data-table
-            :headers="headers"
-            :items="content"
-            style="width: 80vw; border: 1px solid #de699e"
+        <v-col cols="12">
+          <span style="font-size: 1.3em"> The Blockchain Explorer </span>
+        </v-col>
+        <v-col cols="8">
+          <v-text-field
+            v-model="search_item"
+            append-icon="mdi-magnify"
+            label="Search transactions..."
+            single-line
+            hide-details
+            outlined
           >
-          </v-data-table>
-        </div>
-        <div v-else><br /><br />{{ "尚無資料...." }}</div>
+          </v-text-field>
+        </v-col>
+        <v-col cols="2">
+          <v-select
+            :items="items"
+            v-model="item"
+            outlined
+            hide-details="auto"
+          ></v-select>
+        </v-col>
+        <v-col cols="2">
+          <v-btn width="100%" text plain @click="search"> Search </v-btn>
+        </v-col>
+
+        <v-col cols="12">
+          <v-slide-group show-arrows style="width: 100%">
+            <v-btn-toggle mandatory>
+              <v-btn class="div_card" @click="getData()">
+                <span> Ethereum </span>
+              </v-btn>
+              <v-btn class="div_card" @click="gethook()">
+                <span> BSC </span>
+              </v-btn>
+            </v-btn-toggle>
+          </v-slide-group>
+        </v-col>
+
+        <v-col cols="3" v-if="hook != false">
+          <v-img src="@/assets/hook.png"> </v-img>
+        </v-col>
+
+        <v-col cols="6" v-if="hook != true && block.length > 0">
+          <v-card>
+            <v-card-text>Latest Blocks</v-card-text>
+            <hr />
+            <v-card-text v-for="(block_index, i) in block" :key="i">
+              <v-row>
+                <v-col cols="6">
+                  <a @click="getBlock(block_index.number)">
+                    {{ block_index.number }}
+                  </a>
+                  <br />
+                  {{
+                    new Date(block_index.timestamp * 1000).toLocaleDateString()
+                  }}
+
+                  {{
+                    new Date(block_index.timestamp * 1000).toLocaleTimeString()
+                  }}
+                </v-col>
+                <v-col cols="6">
+                  Miner
+                  <br />
+                  <a @click="getTrans(block_index.transactions)">
+                    {{ block_index.transactions.length }} txns
+                  </a>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+
+        <v-col
+          cols="6"
+          v-if="
+            hook != true && transactions.length > 0 && tran_detail.length > 0
+          "
+        >
+          <v-card>
+            <v-card-text>Latest Transactions</v-card-text>
+            <hr />
+            <v-card-text v-for="i in transactions.length" :key="i">
+              <v-row>
+                <v-col cols="4">
+                  <a @click="getHash(transactions[i - 1])"
+                    >{{ transactions[i - 1].substr(0, 20) }}...</a
+                  >
+                  <br />
+                  {{ new Date(block[0].timestamp * 1000).toLocaleDateString() }}
+
+                  {{ new Date(block[0].timestamp * 1000).toLocaleTimeString() }}
+                </v-col>
+                <v-col cols="8">
+                  From
+                  <a @click="getHash(tran_detail[i - 1].from)"
+                    >{{ tran_detail[i - 1].from.substr(0, 35) }}...</a
+                  >
+                  <br />
+                  To
+                  <a @click="getHash(tran_detail[i - 1].to)"
+                    >{{ tran_detail[i - 1].to.substr(0, 35) }}...</a
+                  >
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
       </v-row>
     </v-container>
 
+    <!-- dialog_search -->
+    <v-dialog
+      max-width="90vw"
+      v-model="dialog_search"
+      content-class="vdialognew"
+    >
+      <div style="height: 80vh; background: white">
+        <v-container fluid v-if="detail_search != null">
+          <v-row>
+            <v-col cols="12">
+              <span style="font-size: 1.5em">Transaction Details</span>
+            </v-col>
+
+            <!-- tx_hash -->
+            <v-col cols="5"> Transaction Hash </v-col>
+            <v-col cols="7">
+              {{ detail_search.tx_hash }}
+            </v-col>
+
+            <!-- block_height -->
+            <v-col cols="5"> Block </v-col>
+            <v-col cols="7">
+              {{ detail_search.block_height }}
+            </v-col>
+
+            <!-- successful -->
+            <v-col cols="5"> Status </v-col>
+            <v-col cols="7">
+              <v-icon
+                v-if="detail_search.successful == true"
+                style="color: teal"
+                >mdi-check-circle
+              </v-icon>
+              <v-icon v-else style="color: red">mdi-close </v-icon>
+            </v-col>
+
+            <!-- block_signed_at -->
+            <v-col cols="5"> Timestamp </v-col>
+            <v-col cols="7">
+              {{ detail_search.block_signed_at }}
+            </v-col>
+
+            <!-- value -->
+            <v-col cols="5"> Value </v-col>
+            <v-col cols="7">
+              {{ (detail_search.value * 0.000000000000000001).toFixed(3) }} ETH
+            </v-col>
+
+            <!-- from_address -->
+            <v-col cols="5"> From </v-col>
+            <v-col cols="7">
+              {{ detail_search.from_address }}
+            </v-col>
+
+            <!-- to_address -->
+            <v-col cols="5"> To </v-col>
+            <v-col cols="7">
+              {{ detail_search.to_address }}
+            </v-col>
+
+            <!-- gas_price -->
+            <v-col cols="5"> Gas Price </v-col>
+            <v-col cols="7">
+              {{ detail_search.gas_price * 0.000000001 }} Gwei
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+    </v-dialog>
+
     <!-- dialog -->
     <v-dialog max-width="90vw" v-model="dialog" content-class="vdialognew">
-      <div max-width="90vw" style="height: 80vh; background: white">
+      <div style="height: 80vh; background: white">
         <v-container fluid v-if="detail_item != null">
           <v-row>
             <v-col cols="12">
@@ -97,52 +197,102 @@
             <!-- tx_hash -->
             <v-col cols="5"> Transaction Hash </v-col>
             <v-col cols="7">
-              {{ detail_item.tx_hash }}
+              {{ detail_item.hash }}
             </v-col>
 
             <!-- block_height -->
             <v-col cols="5"> Block </v-col>
             <v-col cols="7">
-              {{ detail_item.block_height }}
+              {{ detail_item.blockNumber }}
             </v-col>
 
-            <!-- successful -->
-            <v-col cols="5"> Status </v-col>
+            <!-- Confirmations -->
+            <v-col cols="5"> Confirmations </v-col>
             <v-col cols="7">
-              <v-icon v-if="detail_item.successful == true" style="color: teal"
-                >mdi-check-circle
-              </v-icon>
-              <v-icon v-else style="color: red">mdi-close </v-icon>
-            </v-col>
-
-            <!-- block_signed_at -->
-            <v-col cols="5"> Timestamp </v-col>
-            <v-col cols="7">
-              {{ detail_item.block_signed_at }}
-            </v-col>
-
-            <!-- value -->
-            <v-col cols="5"> Value </v-col>
-            <v-col cols="7">
-              {{ (detail_item.value * 0.000000000000000001).toFixed(3) }} ETH
+              {{ detail_item.confirmations }}
             </v-col>
 
             <!-- from_address -->
             <v-col cols="5"> From </v-col>
             <v-col cols="7">
-              {{ detail_item.from_address }}
+              {{ detail_item.from }}
             </v-col>
 
             <!-- to_address -->
             <v-col cols="5"> To </v-col>
             <v-col cols="7">
-              {{ detail_item.to_address }}
+              {{ detail_item.to }}
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+    </v-dialog>
+
+    <!-- dialog_block -->
+    <v-dialog
+      max-width="90vw"
+      v-model="dialog_block"
+      content-class="vdialognew"
+    >
+      <div style="height: 80vh; background: white">
+        <v-container fluid v-if="detail_block != null">
+          <v-row>
+            <v-col cols="12">
+              <span style="font-size: 1.5em">Block Details</span>
             </v-col>
 
-            <!-- gas_price -->
-            <v-col cols="5"> Gas Price </v-col>
+            <!-- block_height -->
+            <v-col cols="5"> Block </v-col>
             <v-col cols="7">
-              {{ detail_item.gas_price * 0.000000001 }} Gwei
+              {{ detail_block.number }}
+            </v-col>
+
+            <!-- tx_hash -->
+            <v-col cols="5"> Transaction Hash </v-col>
+            <v-col cols="7">
+              {{ detail_block.hash }}
+            </v-col>
+
+            <!-- Difficulty -->
+            <v-col cols="5"> Difficulty </v-col>
+            <v-col cols="7">
+              {{ detail_block.difficulty }}
+            </v-col>
+
+            <!-- Timestamp -->
+            <v-col cols="5"> TimeStamp </v-col>
+            <v-col cols="7">
+              {{ new Date(detail_block.timestamp * 1000).toLocaleDateString() }}
+
+              {{ new Date(detail_block.timestamp * 1000).toLocaleTimeString() }}
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+    </v-dialog>
+
+    <!-- dialog of trans -->
+    <v-dialog
+      max-width="90vw"
+      v-model="dialog_trans"
+      content-class="vdialognew"
+    >
+      <div max-width="90vw" style="background: white">
+        <v-container fluid v-if="detail_trans != null">
+          <v-row>
+            <v-col cols="12">
+              <span style="font-size: 1.5em">Transactions</span>
+              <br /><br />
+
+              <a
+                v-for="x in detail_trans.length"
+                :key="x"
+                @click="getHash(detail_trans[x - 1])"
+              >
+                <p>
+                  {{ detail_trans[x - 1] }}
+                </p>
+              </a>
             </v-col>
           </v-row>
         </v-container>
@@ -154,7 +304,6 @@
 <script>
 import toolbar from "../components/toolbar";
 import * as blockchain from "../modules/blockchain";
-import * as layer2 from "../modules/layer2";
 export default {
   name: "Defi",
   components: {
@@ -162,119 +311,123 @@ export default {
   },
   data() {
     return {
-      ethereumStatus: null,
-      binanceStatus: null,
+      // bsc
+      hook: false,
 
       // search
       search_item: null,
       items: ["Ethereum", "BSC"],
       item: "Ethereum",
 
-      headers: [
-        {
-          text: "Height",
-          align: "center",
-          value: "height",
-          width: "50%",
-        },
-        {
-          text: "Signed_At",
-          align: "center",
-          value: "signed_at",
-          width: "50%",
-        },
-      ],
-      content: [],
+      blocknum: null,
+      block: [],
+      transactions: [],
+      tran_detail: [],
+
+      // dialog_search
+      dialog_search: false,
+      detail_search: null,
 
       // dialog
       dialog: false,
       detail_item: null,
+
+      // dialog of trans
+      dialog_trans: false,
+      detail_trans: null,
+
+      // dialog of block
+      dialog_block: false,
+      detail_block: null,
     };
   },
   methods: {
-    getEthereumStatus() {
-      Promise.resolve(blockchain.getChainStatus(1)).then((result) => {
-        console.log(result);
+    async getData() {
+      this.hook = false;
+      this.blocknum = await blockchain.ethereum.getBlockNumber();
 
-        this.ethereumStatus = result;
-      });
+      let list = [];
+      let caller = [];
+      let caller2 = [];
+      let vm = this;
+
+      for (let i = 1; i <= 10; i++) {
+        caller.push(blockchain.ethereum.getBlock(this.blocknum - i));
+      }
+      Promise.all(caller)
+        .then((result) => {
+          vm.block = Object.assign([], result);
+
+          for (let j = 0; j < 10; j++) {
+            list = list.concat(result[j].transactions);
+          }
+          vm.transactions = list.slice(0, 10);
+        })
+        .then(() => {
+          // get transaction
+          for (let k = 0; k < 10; k++) {
+            caller2.push(
+              blockchain.ethereum.getTransaction(vm.transactions[k])
+            );
+          }
+          Promise.all(caller2).then((result) => {
+            vm.tran_detail = Object.assign([], result);
+
+            console.log(vm.block);
+          });
+        });
     },
 
-    getBinanceStatus() {
-      Promise.resolve(blockchain.getChainStatus(56)).then((result) => {
-        console.log(result);
+    async search() {
+      this.dialog_search = true;
 
-        this.binanceStatus = result;
-      });
-    },
-
-    getEthereumData() {
-      Promise.resolve(blockchain.getRecentBlocks(1)).then((result) => {
-        console.log(result);
-
-        this.content = result.data.data.items;
-      });
-    },
-
-    getBinanceData() {
-      Promise.resolve(blockchain.getRecentBlocks(56)).then((result) => {
-        console.log(result);
-
-        this.content = result.data.data.items;
-      });
-    },
-
-    submit() {
       let chain_id = 1;
-
       if (this.item === "BSC") {
         chain_id = 56;
       }
 
-      Promise.resolve(
-        blockchain.getTransaction(chain_id, this.search_item)
-      ).then((result) => {
-        console.log(result);
-        this.detail_item = result.data.data.items[0];
-      });
+      console.log(chain_id);
+      console.log(this.search_item);
 
+      let result = await blockchain.getTransaction(chain_id, this.search_item);
+      console.log(result);
+      this.detail_search = result.data.data.items[0];
+    },
+
+    async getBlock(block) {
+      this.dialog_block = true;
+      let result = await blockchain.ethereum.getBlock(block);
+      console.log(result);
+      this.detail_block = result;
+    },
+
+    getTrans(items) {
+      this.dialog_trans = true;
+      this.detail_trans = items;
+    },
+
+    async getHash(hash) {
       this.dialog = true;
+      let result = await blockchain.ethereum.getTransaction(hash);
+      console.log(result);
+      this.detail_item = result;
     },
-    test() {
-      Promise.resolve(
-        layer2.getTransaction(
-          137,
-          "0xbfa2d54005e7e22bc3c2017d2acbbee971cd7b16b01f48ef1f8992ac2792078f"
-        )
-      ).then((result) => {
-        console.log(result);
-      });
-    },
-    test2() {
-      Promise.resolve(
-        blockchain.ethereum.getTransaction(
-          "0xf9fc36b52f73cae07c5399064b6c978998bdd62ec3d4f7c090ea7b82ec10e1b4"
-        )
-      ).then((result) => {
-        console.log(result);
-      });
+
+    gethook() {
+      this.hook = true;
     },
   },
-  created: function () {
-    this.getEthereumStatus();
-    this.getBinanceStatus();
-
-    this.getEthereumData();
+  created: async function () {
+    this.getData();
   },
 };
 </script>
 
 <style scoped>
 .div_card {
-  background-color: black;
-  width: 40vw;
+  width: 120px;
   border-radius: 10px;
-  border: 1px solid white;
+  border: 1px solid black;
 
   color: gray;
 }
