@@ -20,16 +20,21 @@ const routes = [
       title: 'Blockchain | The Explorer'}
   },
   {
-    path: '/Test',
-    name: 'Test',
-    component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/Test.vue')
-    },
+    path: '/Blockchain',
+    name: 'Blockchain',
+    component: () => import("@/views/Blockchain"),
     meta: {
-      title: 'Dokodemodoa'}
+      title: 'Blockchain | The Explorer'}
   },
   {
-    path: '/defi',
+    path: '/Layer2',
+    name: 'Layer2',
+    component: () => import("@/views/Layer2"),
+    meta: {
+      title: 'Layer2 | The Explorer'}
+  },
+  {
+    path: '/Defi',
     name: 'Defi',
     component: function () {
       return import(/* webpackChunkName: "about" */ '../views/Defi.vue')
@@ -43,7 +48,17 @@ const routes = [
     //     }
     //   },
     // ]
-  }
+  },
+  {
+    path: '/Test',
+    name: 'Test',
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/Test.vue')
+    },
+    meta: {
+      title: 'Dokodemodoa'}
+  },
+  
 ]
 
 const router = new VueRouter({

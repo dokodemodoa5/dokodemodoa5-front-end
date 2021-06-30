@@ -8,24 +8,20 @@
           <br />
 
           <v-row align="center" justify="center" style="text-align: start">
-            <v-btn dark outlined plain @click="getUniSwapData">UNISWAP</v-btn>
+            <v-btn outlined plain @click="getUniSwapData">UNISWAP</v-btn>
             &ensp;
-            <v-btn dark outlined plain @click="getUmaData">UMA</v-btn>
+            <v-btn outlined plain @click="getUmaData">UMA</v-btn>
             &ensp;
-            <v-btn dark outlined plain @click="getCompoundData">COMPOUND</v-btn>
+            <v-btn outlined plain @click="getCompoundData">COMPOUND</v-btn>
             &ensp;
-            <v-btn dark outlined plain @click="getNexusData"
-              >Nexus Mutual</v-btn
-            >
-            <v-btn dark outlined plain @click="get88MphData">88MPH</v-btn>
+            <v-btn outlined plain @click="getNexusData">Nexus Mutual</v-btn>
+            <v-btn outlined plain @click="get88MphData">88MPH</v-btn>
             &ensp;
-            <v-btn dark outlined plain @click="getLiquityData">Liquity</v-btn>
+            <v-btn outlined plain @click="getLiquityData">Liquity</v-btn>
             &ensp;
-            <v-btn dark outlined plain @click="getAkropolisData"
-              >Akropolis</v-btn
-            >
+            <v-btn outlined plain @click="getAkropolisData">Akropolis</v-btn>
             &ensp;
-            <v-btn dark outlined plain @click="getIdleFinanceData"
+            <v-btn outlined plain @click="getIdleFinanceData"
               >Idle Finance</v-btn
             >
           </v-row>
@@ -39,13 +35,11 @@
             single-line
             hide-details
             outlined
-            dark
           ></v-text-field>
 
           <br />
 
           <v-data-table
-            dark
             :search="search_item"
             :headers="headers"
             :items="content"
