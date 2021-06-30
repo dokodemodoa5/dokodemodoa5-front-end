@@ -7,7 +7,7 @@
           <br />
           <v-row align="center" justify="center" style="text-align: start">
             <v-col cols="12">
-              <v-slide-group show-arrows dark style="width: 100%">
+              <v-slide-group show-arrows style="width: 100%">
                 <v-btn-toggle mandatory>
                   <v-btn
                     v-if="ethereumStatus != null"
@@ -56,7 +56,6 @@
                 single-line
                 hide-details
                 outlined
-                dark
               >
               </v-text-field>
             </v-col>
@@ -66,20 +65,16 @@
                 v-model="item"
                 outlined
                 hide-details="auto"
-                dark
               ></v-select>
             </v-col>
             <v-col cols="2">
-              <v-btn width="100%" dark text plain @click="submit">
-                Search
-              </v-btn>
+              <v-btn width="100%" text plain @click="submit"> Search </v-btn>
             </v-col>
           </v-row>
 
           <br />
 
           <v-data-table
-            dark
             :headers="headers"
             :items="content"
             style="width: 80vw; border: 1px solid #de699e"
@@ -163,7 +158,7 @@ import * as layer2 from "../modules/layer2";
 export default {
   name: "Defi",
   components: {
-    toolbar
+    toolbar,
   },
   data() {
     return {
@@ -180,20 +175,20 @@ export default {
           text: "Height",
           align: "center",
           value: "height",
-          width: "50%"
+          width: "50%",
         },
         {
           text: "Signed_At",
           align: "center",
           value: "signed_at",
-          width: "50%"
-        }
+          width: "50%",
+        },
       ],
       content: [],
 
       // dialog
       dialog: false,
-      detail_item: null
+      detail_item: null,
     };
   },
   methods: {
@@ -263,14 +258,14 @@ export default {
       ).then((result) => {
         console.log(result);
       });
-    }
+    },
   },
   created: function () {
     this.getEthereumStatus();
     this.getBinanceStatus();
 
     this.getEthereumData();
-  }
+  },
 };
 </script>
 

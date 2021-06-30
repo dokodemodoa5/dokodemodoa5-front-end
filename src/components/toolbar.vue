@@ -1,7 +1,7 @@
 <template>
   <!-- <div style="background: #de699e; border-bottom: 1px solid black"> -->
   <div>
-    <v-toolbar class="elevation-0" color="rgb(255,255,255,0)" dark>
+    <v-toolbar class="elevation-0" color="rgb(255,255,255,0)">
       <!-- <a @click="render('Home')">
         <v-img
           class="mx-2"
