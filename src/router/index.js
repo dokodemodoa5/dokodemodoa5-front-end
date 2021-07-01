@@ -29,9 +29,9 @@ const routes = [
   {
     path: '/Defi',
     name: 'Defi',
-    component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/Defi.vue')
-    },
+    component: () => import("@/views/Defi"),
+    meta: {
+      title: 'Defi | The Explorer'}
   },
 ]
 

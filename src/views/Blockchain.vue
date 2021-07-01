@@ -6,7 +6,7 @@
         <v-col cols="12">
           <span style="font-size: 1.3em"> The Blockchain Explorer </span>
         </v-col>
-        <v-col cols="8">
+        <v-col cols="12" md="8">
           <v-text-field
             v-model="search_item"
             append-icon="mdi-magnify"
@@ -17,7 +17,7 @@
           >
           </v-text-field>
         </v-col>
-        <v-col cols="2">
+        <v-col cols="6" md="2">
           <v-select
             :items="items"
             v-model="item"
@@ -25,7 +25,7 @@
             hide-details="auto"
           ></v-select>
         </v-col>
-        <v-col cols="2">
+        <v-col cols="12" md="2">
           <v-btn width="100%" text plain @click="search"> Search </v-btn>
         </v-col>
 
@@ -42,11 +42,11 @@
           </v-slide-group>
         </v-col>
 
-        <v-col cols="3" v-if="hook != false">
+        <v-col cols="6" md="3" v-if="hook != false">
           <v-img src="@/assets/hook.png"> </v-img>
         </v-col>
 
-        <v-col cols="6" v-if="hook != true && block.length > 0">
+        <v-col cols="12" md="6" v-if="hook != true && block.length > 0">
           <v-card>
             <v-card-text>Latest Blocks</v-card-text>
             <hr />
@@ -78,7 +78,8 @@
         </v-col>
 
         <v-col
-          cols="6"
+          cols="12"
+          md="6"
           v-if="
             hook != true && transactions.length > 0 && tran_detail.length > 0
           "

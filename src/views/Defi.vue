@@ -8,44 +8,99 @@
           <br />
 
           <v-row align="center" justify="center" style="text-align: start">
-            <v-btn outlined plain @click="getUniSwapData">UNISWAP</v-btn>
-            &ensp;
-            <v-btn outlined plain @click="getUmaData">UMA</v-btn>
-            &ensp;
-            <v-btn outlined plain @click="getCompoundData">COMPOUND</v-btn>
-            &ensp;
-            <v-btn outlined plain @click="getNexusData">Nexus Mutual</v-btn>
-            <v-btn outlined plain @click="get88MphData">88MPH</v-btn>
-            &ensp;
-            <v-btn outlined plain @click="getLiquityData">Liquity</v-btn>
-            &ensp;
-            <v-btn outlined plain @click="getAkropolisData">Akropolis</v-btn>
-            &ensp;
-            <v-btn outlined plain @click="getIdleFinanceData"
-              >Idle Finance</v-btn
-            >
+            <v-col cols="10" md="12">
+              <v-btn
+                style="margin-bottom: 8px"
+                outlined
+                plain
+                @click="getUniSwapData"
+                >UNISWAP</v-btn
+              >
+              &ensp;
+              <v-btn
+                style="margin-bottom: 8px"
+                outlined
+                plain
+                @click="getUmaData"
+                >UMA</v-btn
+              >
+              &ensp;
+              <v-btn
+                style="margin-bottom: 8px"
+                outlined
+                plain
+                @click="getCompoundData"
+                >COMPOUND</v-btn
+              >
+              &ensp;
+              <v-btn
+                style="margin-bottom: 8px"
+                outlined
+                plain
+                @click="getNexusData"
+                >Nexus Mutual</v-btn
+              >
+              &ensp;
+              <v-btn
+                style="margin-bottom: 8px"
+                outlined
+                plain
+                @click="get88MphData"
+                >88MPH</v-btn
+              >
+              &ensp;
+              <v-btn
+                style="margin-bottom: 8px"
+                outlined
+                plain
+                @click="getLiquityData"
+                >Liquity</v-btn
+              >
+              &ensp;
+              <v-btn
+                style="margin-bottom: 8px"
+                outlined
+                plain
+                @click="getAkropolisData"
+                >Akropolis</v-btn
+              >
+              &ensp;
+              <v-btn
+                style="margin-bottom: 8px"
+                outlined
+                plain
+                @click="getIdleFinanceData"
+                >Idle Finance</v-btn
+              >
+            </v-col>
           </v-row>
 
           <br />
 
-          <v-text-field
-            v-model="search_item"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-            outlined
-          ></v-text-field>
+          <v-row align="center" justify="center" style="text-align: center">
+            <v-col cols="10" md="12">
+              <v-text-field
+                v-model="search_item"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+                outlined
+              ></v-text-field>
 
-          <br />
-
-          <v-data-table
-            :search="search_item"
-            :headers="headers"
-            :items="content"
-            style="width: 80vw; border: 1px solid #de699e"
-          >
-          </v-data-table>
+              <br />
+            </v-col>
+            <v-col cols="10" md="12">
+              <v-data-table
+                width="100%"
+                :search="search_item"
+                :headers="headers"
+                :items="content"
+                style="border: 1px solid #de699e"
+              >
+              </v-data-table>
+            </v-col>
+          </v-row>
         </div>
         <div v-else><br /><br />{{ "尚無資料...." }}</div>
       </v-row>
