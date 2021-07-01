@@ -26,16 +26,18 @@
           ></v-select>
         </v-col>
         <v-col cols="6" md="2">
-          <v-btn width="100%" text plain @click="search"> Search </v-btn>
+          <v-btn color="#de699e" width="100%" text plain @click="search">
+            Search
+          </v-btn>
         </v-col>
 
         <v-col cols="12">
           <v-slide-group show-arrows style="width: 100%">
-            <v-btn-toggle mandatory>
-              <v-btn class="div_card" @click="getData(137)">
+            <v-btn-toggle mandatory color="#de699e">
+              <v-btn plain class="div_card" @click="getData(137)">
                 <span> Polygon </span>
               </v-btn>
-              <v-btn class="div_card" @click="getData(10)">
+              <v-btn plain class="div_card" @click="getData(10)">
                 <span> Optimism </span>
               </v-btn>
             </v-btn-toggle>
@@ -43,13 +45,18 @@
         </v-col>
 
         <v-col cols="12" md="6" v-if="block.length > 0">
-          <v-card>
-            <v-card-text>Latest Blocks</v-card-text>
+          <v-card style="border: 1px solid #de699e">
+            <v-card-text style="background: #de699e; color: white"
+              >Latest Blocks</v-card-text
+            >
             <hr />
             <v-card-text v-for="(block_index, i) in block" :key="i">
               <v-row>
                 <v-col cols="6">
-                  <a @click="getBlock(block_index.number)">
+                  <a
+                    style="color: #de699e"
+                    @click="getBlock(block_index.number)"
+                  >
                     {{ block_index.number }}
                   </a>
                   <br />
@@ -62,9 +69,14 @@
                   }}
                 </v-col>
                 <v-col cols="6">
-                  Miner
+                  <a style="color: #de699e" @click="getMiner(block_index.miner)"
+                    >Miner</a
+                  >
                   <br />
-                  <a @click="getTrans(block_index.transactions)">
+                  <a
+                    style="color: #de699e"
+                    @click="getTrans(block_index.transactions)"
+                  >
                     {{ block_index.transactions.length }} txns
                   </a>
                 </v-col>
@@ -78,13 +90,17 @@
           md="6"
           v-if="transactions.length > 0 && tran_detail.length > 0"
         >
-          <v-card>
-            <v-card-text>Latest Transactions</v-card-text>
+          <v-card style="border: 1px solid #de699e">
+            <v-card-text style="background: #de699e; color: white"
+              >Latest Transactions</v-card-text
+            >
             <hr />
             <v-card-text v-for="i in transactions.length" :key="i">
               <v-row>
                 <v-col cols="4">
-                  <a @click="getHash(transactions[i - 1])"
+                  <a
+                    style="color: #de699e"
+                    @click="getHash(transactions[i - 1])"
                     >{{ transactions[i - 1].substr(0, 20) }}...</a
                   >
                   <br />
@@ -94,12 +110,16 @@
                 </v-col>
                 <v-col cols="8">
                   From
-                  <a @click="getHash(tran_detail[i - 1].from)"
+                  <a
+                    style="color: #de699e"
+                    @click="getHash(tran_detail[i - 1].from)"
                     >{{ tran_detail[i - 1].from.substr(0, 35) }}...</a
                   >
                   <br />
                   To
-                  <a @click="getHash(tran_detail[i - 1].to)"
+                  <a
+                    style="color: #de699e"
+                    @click="getHash(tran_detail[i - 1].to)"
                     >{{ tran_detail[i - 1].to.substr(0, 35) }}...</a
                   >
                 </v-col>
@@ -196,6 +216,26 @@
       </div>
     </v-dialog>
 
+    <!-- dialog of miner -->
+    <v-dialog
+      max-width="90vw"
+      v-model="dialog_miner"
+      content-class="vdialognew"
+    >
+      <div max-width="90vw" style="background: white">
+        <v-container fluid v-if="detail_miner != null">
+          <v-row>
+            <v-col cols="12">
+              <span style="font-size: 1.5em">Miner</span>
+              <br /><br />
+
+              {{ detail_miner }}
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+    </v-dialog>
+
     <!-- dialog of trans -->
     <v-dialog
       max-width="90vw"
@@ -250,6 +290,10 @@ export default {
       // dialog
       dialog: false,
       detail_item: null,
+
+      // dialog of miner
+      dialog_miner: false,
+      detail_miner: null,
 
       // dialog of trans
       dialog_trans: false,
@@ -312,6 +356,12 @@ export default {
       let result = await layer2.getBlock(this.chain, block);
       console.log(result);
       this.detail_block = result;
+    },
+
+    getMiner(item) {
+      this.dialog_miner = true;
+      this.detail_miner = item;
+      console.log(this.detail_miner);
     },
 
     getTrans(items) {

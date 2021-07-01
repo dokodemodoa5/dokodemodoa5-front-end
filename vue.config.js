@@ -17,6 +17,6 @@ module.exports = {
     ],
 
     publicPath: process.env.NODE_ENV === 'production'
-    ? '/dokodemodoa5-front-end/'
-    : '/'
+        ? '/dokodemodoa5-front-end/'
+        : '/'
 }

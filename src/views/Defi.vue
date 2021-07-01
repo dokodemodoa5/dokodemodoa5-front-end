@@ -11,64 +11,64 @@
             <v-col cols="10" md="12">
               <v-btn
                 style="margin-bottom: 8px"
-                outlined
-                plain
+                color="#de699e"
+                dark
                 @click="getUniSwapData"
                 >UNISWAP</v-btn
               >
               &ensp;
               <v-btn
                 style="margin-bottom: 8px"
-                outlined
-                plain
+                color="#de699e"
+                dark
                 @click="getUmaData"
                 >UMA</v-btn
               >
               &ensp;
               <v-btn
                 style="margin-bottom: 8px"
-                outlined
-                plain
+                color="#de699e"
+                dark
                 @click="getCompoundData"
                 >COMPOUND</v-btn
               >
               &ensp;
               <v-btn
                 style="margin-bottom: 8px"
-                outlined
-                plain
+                color="#de699e"
+                dark
                 @click="getNexusData"
                 >Nexus Mutual</v-btn
               >
               &ensp;
               <v-btn
                 style="margin-bottom: 8px"
-                outlined
-                plain
+                color="#de699e"
+                dark
                 @click="get88MphData"
                 >88MPH</v-btn
               >
               &ensp;
               <v-btn
                 style="margin-bottom: 8px"
-                outlined
-                plain
+                color="#de699e"
+                dark
                 @click="getLiquityData"
                 >Liquity</v-btn
               >
               &ensp;
               <v-btn
                 style="margin-bottom: 8px"
-                outlined
-                plain
+                color="#de699e"
+                dark
                 @click="getAkropolisData"
                 >Akropolis</v-btn
               >
               &ensp;
               <v-btn
                 style="margin-bottom: 8px"
-                outlined
-                plain
+                color="#de699e"
+                dark
                 @click="getIdleFinanceData"
                 >Idle Finance</v-btn
               >
