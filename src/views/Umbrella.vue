@@ -89,6 +89,11 @@ export default {
             value: "timestamp"
           }
         ];
+        for (let i = 0; i < result.length; i++) {
+          result[i].assetPair.id = this.hex2String(
+            result[i].assetPair.id.substr(-14)
+          );
+        }
         this.content = result;
         this.overlay = false;
       });
@@ -121,6 +126,13 @@ export default {
         this.content = result;
         this.overlay = false;
       });
+    },
+    hex2String(hex) {
+      let str = "";
+      for (let n = 0; n < hex.length; n += 2) {
+        str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+      }
+      return str;
     }
   },
   created() {
