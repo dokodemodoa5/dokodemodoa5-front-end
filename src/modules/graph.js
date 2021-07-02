@@ -4,7 +4,7 @@ export const umbrella = {
     getAssetPairPriceData: function () {
         var data = JSON.stringify({
             query: `{
-                prices(first: 5) {
+                prices(first: 20) {
                     id
                     assetPair {
                         id
@@ -39,7 +39,7 @@ export const umbrella = {
     getLogMintsData: function () {
         var data = JSON.stringify({
             query: `{
-                logMints(first: 5) {
+                logMints(first: 20) {
                     id
                     minter
                     blockId

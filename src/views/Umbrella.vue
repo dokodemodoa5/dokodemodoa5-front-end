@@ -79,7 +79,7 @@ export default {
             value: "assetPair.id"
           },
           {
-            text: "Price",
+            text: "Price(USD)",
             align: "center",
             value: "price"
           },
@@ -93,6 +93,7 @@ export default {
           result[i].assetPair.id = this.hex2String(
             result[i].assetPair.id.substr(-14)
           );
+          result[i].price = result[i].price / 1000000000000000000;
         }
         this.content = result;
         this.overlay = false;
