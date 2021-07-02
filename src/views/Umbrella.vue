@@ -41,6 +41,9 @@
           </v-row>
         </div>
         <div v-else><br /><br />{{ "尚無資料...." }}</div>
+        <v-overlay absolute :value="overlay">
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
       </v-row>
     </v-container>
   </div>
@@ -56,11 +59,13 @@ export default {
   data() {
     return {
       headers: [],
-      content: []
+      content: [],
+      overlay: true
     };
   },
   methods: {
     getAssetPairPriceData() {
+      this.overlay = true;
       Promise.resolve(graph.umbrella.getAssetPairPriceData()).then((result) => {
         this.headers = [
           {
@@ -85,9 +90,11 @@ export default {
           }
         ];
         this.content = result;
+        this.overlay = false;
       });
     },
     getLogMintsData() {
+      this.overlay = true;
       Promise.resolve(graph.umbrella.getLogMintsData()).then((result) => {
         this.headers = [
           {
@@ -112,6 +119,7 @@ export default {
           }
         ];
         this.content = result;
+        this.overlay = false;
       });
     }
   },

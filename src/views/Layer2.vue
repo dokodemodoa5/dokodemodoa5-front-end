@@ -127,6 +127,9 @@
             </v-card-text>
           </v-card>
         </v-col>
+        <v-overlay absolute :value="overlay">
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
       </v-row>
     </v-container>
 
@@ -272,7 +275,7 @@ import * as layer2 from "../modules/layer2";
 export default {
   name: "Defi",
   components: {
-    toolbar,
+    toolbar
   },
   data() {
     return {
@@ -302,10 +305,13 @@ export default {
       // dialog of block
       dialog_block: false,
       detail_block: null,
+
+      overlay: true
     };
   },
   methods: {
     async getData(chainId) {
+      this.overlay = true;
       this.chain = chainId;
       this.blocknum = await layer2.getBlockNumber(chainId);
 
@@ -335,11 +341,13 @@ export default {
             vm.tran_detail = Object.assign([], result);
 
             console.log(vm.block);
+            vm.overlay = false;
           });
         });
     },
 
     async search() {
+      this.overlay = true;
       this.dialog = true;
 
       let id = 137;
@@ -349,13 +357,16 @@ export default {
       let result = await layer2.getTransaction(id, this.search_item);
       console.log(result);
       this.detail_item = result;
+      this.overlay = false;
     },
 
     async getBlock(block) {
+      this.overlay = true;
       this.dialog_block = true;
       let result = await layer2.getBlock(this.chain, block);
       console.log(result);
       this.detail_block = result;
+      this.overlay = false;
     },
 
     getMiner(item) {
@@ -370,15 +381,17 @@ export default {
     },
 
     async getHash(hash) {
+      this.overlay = true;
       this.dialog = true;
       let result = await layer2.getTransaction(this.chain, hash);
       console.log(result);
       this.detail_item = result;
-    },
+      this.overlay = false;
+    }
   },
   created: async function () {
     this.getData(137);
-  },
+  }
 };
 </script>
 

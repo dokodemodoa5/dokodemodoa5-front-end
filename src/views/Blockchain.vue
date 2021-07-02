@@ -133,6 +133,9 @@
             </v-card-text>
           </v-card>
         </v-col>
+        <v-overlay absolute :value="overlay">
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
       </v-row>
     </v-container>
 
@@ -344,7 +347,7 @@ import * as blockchain from "../modules/blockchain";
 export default {
   name: "Defi",
   components: {
-    toolbar,
+    toolbar
   },
   data() {
     return {
@@ -380,10 +383,13 @@ export default {
       // dialog of block
       dialog_block: false,
       detail_block: null,
+
+      overlay: true
     };
   },
   methods: {
     async getData() {
+      this.overlay = true;
       this.hook = false;
       this.blocknum = await blockchain.ethereum.getBlockNumber();
 
@@ -415,11 +421,13 @@ export default {
             vm.tran_detail = Object.assign([], result);
 
             console.log(vm.block);
+            vm.overlay = false;
           });
         });
     },
 
     async search() {
+      this.overlay = true;
       this.dialog_search = true;
 
       let chain_id = 1;
@@ -433,13 +441,16 @@ export default {
       let result = await blockchain.getTransaction(chain_id, this.search_item);
       console.log(result);
       this.detail_search = result.data.data.items[0];
+      this.overlay = false;
     },
 
     async getBlock(block) {
+      this.overlay = true;
       this.dialog_block = true;
       let result = await blockchain.ethereum.getBlock(block);
       console.log(result);
       this.detail_block = result;
+      this.overlay = false;
     },
 
     getMiner(item) {
@@ -454,19 +465,21 @@ export default {
     },
 
     async getHash(hash) {
+      this.overlay = true;
       this.dialog = true;
       let result = await blockchain.ethereum.getTransaction(hash);
       console.log(result);
       this.detail_item = result;
+      this.overlay = false;
     },
 
     gethook() {
       this.hook = true;
-    },
+    }
   },
   created: async function () {
     this.getData();
-  },
+  }
 };
 </script>
 
