@@ -103,6 +103,9 @@
           </v-row>
         </div>
         <div v-else><br /><br />{{ "尚無資料...." }}</div>
+        <v-overlay absolute :value="overlay">
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
       </v-row>
     </v-container>
   </div>
@@ -114,7 +117,7 @@ import * as defi from "../modules/defi";
 export default {
   name: "Defi",
   components: {
-    toolbar,
+    toolbar
   },
   data() {
     return {
@@ -123,10 +126,12 @@ export default {
 
       headers: [],
       content: [],
+      overlay: true
     };
   },
   methods: {
     getUniSwapData() {
+      this.overlay = true;
       Promise.resolve(defi.getUniSwapData()).then((result) => {
         console.log(result);
 
@@ -135,23 +140,25 @@ export default {
           {
             text: "Name",
             align: "center",
-            value: "name",
+            value: "name"
           },
           {
             text: "Symbol",
             align: "center",
-            value: "symbol",
+            value: "symbol"
           },
           {
             text: "TVL",
             align: "center",
-            value: "totalValueLocked",
-          },
+            value: "totalValueLocked"
+          }
         ];
         this.content = result;
+        this.overlay = false;
       });
     },
     getUmaData() {
+      this.overlay = true;
       Promise.resolve(defi.getUmaData()).then((result) => {
         console.log(result);
 
@@ -160,18 +167,20 @@ export default {
           {
             text: "Name",
             align: "center",
-            value: "name",
+            value: "name"
           },
           {
             text: "Symbol",
             align: "center",
-            value: "symbol",
-          },
+            value: "symbol"
+          }
         ];
         this.content = result;
+        this.overlay = false;
       });
     },
     getCompoundData() {
+      this.overlay = true;
       Promise.resolve(defi.getCompoundData()).then((result) => {
         console.log(result);
 
@@ -180,28 +189,30 @@ export default {
           {
             text: "Name",
             align: "center",
-            value: "name",
+            value: "name"
           },
           {
             text: "Symbol",
             align: "center",
-            value: "symbol",
+            value: "symbol"
           },
           {
             text: "TotalBorrows",
             align: "center",
-            value: "totalBorrows",
+            value: "totalBorrows"
           },
           {
             text: "TotalSupply",
             align: "center",
-            value: "totalSupply",
-          },
+            value: "totalSupply"
+          }
         ];
         this.content = result;
+        this.overlay = false;
       });
     },
     getNexusData() {
+      this.overlay = true;
       Promise.resolve(defi.getNexusData()).then((result) => {
         console.log(result);
 
@@ -210,18 +221,20 @@ export default {
           {
             text: "RewardAmount",
             align: "center",
-            value: "rewardAmount",
+            value: "rewardAmount"
           },
           {
             text: "Timestamp",
             align: "center",
-            value: "timestamp",
-          },
+            value: "timestamp"
+          }
         ];
         this.content = result.projectRewards;
+        this.overlay = false;
       });
     },
     get88MphData() {
+      this.overlay = true;
       Promise.resolve(defi.get88MphData()).then((result) => {
         console.log(result);
 
@@ -230,23 +243,25 @@ export default {
           {
             text: "RewardPerMPHPerSecond",
             align: "center",
-            value: "rewardPerMPHPerSecond",
+            value: "rewardPerMPHPerSecond"
           },
           {
             text: "RewardPerSecond",
             align: "center",
-            value: "rewardPerSecond",
+            value: "rewardPerSecond"
           },
           {
             text: "TotalHistoricalReward",
             align: "center",
-            value: "totalHistoricalReward",
-          },
+            value: "totalHistoricalReward"
+          }
         ];
         this.content = result;
+        this.overlay = false;
       });
     },
     getLiquityData() {
+      this.overlay = true;
       Promise.resolve(defi.getLiquityData()).then((result) => {
         console.log(result);
 
@@ -255,23 +270,25 @@ export default {
           {
             text: "Name",
             align: "center",
-            value: "name",
+            value: "name"
           },
           {
             text: "Symbol",
             align: "center",
-            value: "symbol",
+            value: "symbol"
           },
           {
             text: "TotalSupply",
             align: "center",
-            value: "totalSupply",
-          },
+            value: "totalSupply"
+          }
         ];
         this.content = result.tokens;
+        this.overlay = false;
       });
     },
     getAkropolisData() {
+      this.overlay = true;
       Promise.resolve(defi.getAkropolisData()).then((result) => {
         console.log(result);
 
@@ -280,23 +297,25 @@ export default {
           {
             text: "LBalance",
             align: "center",
-            value: "lBalance",
+            value: "lBalance"
           },
           {
             text: "PBalance",
             align: "center",
-            value: "pBalance",
+            value: "pBalance"
           },
           {
             text: "PInterestSum",
             align: "center",
-            value: "pInterestSum",
-          },
+            value: "pInterestSum"
+          }
         ];
         this.content = result;
+        this.overlay = false;
       });
     },
     getIdleFinanceData() {
+      this.overlay = true;
       Promise.resolve(defi.getIdleFinanceData()).then((result) => {
         console.log(result);
 
@@ -305,30 +324,31 @@ export default {
           {
             text: "Name",
             align: "center",
-            value: "name",
+            value: "name"
           },
           {
             text: "LastPrice",
             align: "center",
-            value: "lastPrice",
+            value: "lastPrice"
           },
           {
             text: "TotalSupply",
             align: "center",
-            value: "totalSupply",
+            value: "totalSupply"
           },
           {
             text: "Decimals",
             align: "center",
-            value: "decimals",
-          },
+            value: "decimals"
+          }
         ];
         this.content = result;
+        this.overlay = false;
       });
-    },
+    }
   },
   created: function () {
     this.getUniSwapData();
-  },
+  }
 };
 </script>

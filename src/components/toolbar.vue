@@ -37,6 +37,10 @@
         <v-btn plain text @click="render('Defi')">
           <span>Defi</span>
         </v-btn>
+        |
+        <v-btn plain text @click="render('Umbrella')">
+          <span>Our Cool Subgraph 🥳</span>
+        </v-btn>
 
         <!-- <v-btn plain text>
           <v-menu open-on-hover offset-x>
@@ -71,18 +75,18 @@ export default {
   data: () => ({
     lang: [
       { name: "繁體中文", url: "" },
-      { name: "English", url: "" },
-    ],
+      { name: "English", url: "" }
+    ]
   }),
   methods: {
     render(path_url) {
       console.log(path_url);
       this.$router.push({ name: path_url });
-    },
+    }
   },
   created: function () {},
   computed: {},
-  watch: {},
+  watch: {}
 };
 </script>
 
