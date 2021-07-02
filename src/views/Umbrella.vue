@@ -69,7 +69,7 @@ export default {
       Promise.resolve(graph.umbrella.getAssetPairPriceData()).then((result) => {
         this.headers = [
           {
-            text: "Id",
+            text: "TxHash",
             align: "center",
             value: "id"
           },
@@ -104,7 +104,7 @@ export default {
       Promise.resolve(graph.umbrella.getLogMintsData()).then((result) => {
         this.headers = [
           {
-            text: "Id",
+            text: "TxHash",
             align: "center",
             value: "id"
           },
