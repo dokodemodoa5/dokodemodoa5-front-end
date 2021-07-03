@@ -4,7 +4,11 @@ export const umbrella = {
     getAssetPairPriceData: function () {
         var data = JSON.stringify({
             query: `{
-                prices(first: 20) {
+                prices(
+                    first: 20
+                    orderBy: timestamp
+                    orderDirection: desc
+                ) {
                     id
                     assetPair {
                         id
