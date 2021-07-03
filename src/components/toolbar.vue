@@ -39,7 +39,7 @@
         </v-btn>
         |
         <v-btn plain text @click="render('Umbrella')">
-          <span>Our Cool Subgraph 🥳</span>
+          <span>Umbrella Subgraph ☂️</span>
         </v-btn>
 
         <!-- <v-btn plain text>
