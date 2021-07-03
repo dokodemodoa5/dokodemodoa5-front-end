@@ -44,8 +44,22 @@
           </v-slide-group>
         </v-col>
 
-        <v-col cols="6" md="3" v-if="hook != false">
-          <v-img src="@/assets/hook.png"> </v-img>
+        <v-col cols="12" md="6" v-if="hook != false">
+          <v-card style="border: 1px solid #de699e">
+            <v-card-text style="background: #de699e; color: white"
+              >Latest Blocks</v-card-text
+            >
+            <hr />
+            <v-card-text v-for="(block, i) in block" :key="i">
+              <v-row>
+                <v-col>{{ block.height }}</v-col>
+                <v-col>
+                  {{ new Date(block.signed_at).toLocaleDateString() }}
+                  {{ new Date(block.signed_at).toLocaleTimeString() }}
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
         </v-col>
 
         <v-col cols="12" md="6" v-if="hook != true && block.length > 0">
@@ -391,6 +405,7 @@ export default {
     async getData() {
       this.overlay = true;
       this.hook = false;
+      this.item = "Ethereum";
       this.blocknum = await blockchain.ethereum.getBlockNumber();
 
       let list = [];
@@ -473,8 +488,16 @@ export default {
       this.overlay = false;
     },
 
-    gethook() {
+    async gethook() {
+      this.overlay = true;
       this.hook = true;
+      this.item = "BSC";
+      let BSCBlocks = await blockchain.getRecentBlocks(56);
+      this.block = BSCBlocks.data.data.items;
+      this.block.sort((a, b) => {
+        return b.height - a.height;
+      });
+      this.overlay = false;
     }
   },
   created: async function () {

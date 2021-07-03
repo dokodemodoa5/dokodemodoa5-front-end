@@ -26,13 +26,23 @@ export const getChainStatus = function (chainId) {
     })
 }
 
+export const getABlock = function (chainId, height) {
+    return new Promise((resolve, reject) => {
+        axios.get(
+            `${covalent_url}/v1/${chainId}/block_v2/${height}/?key=${process.env.VUE_APP_COVALENT_KEY}`
+        ).then((result) => {
+            resolve(result)
+        })
+    })
+}
+
 export const getRecentBlocks = function (chainId) {
     let start = new Date();
-    let end = new Date(start - 0.1 * 3600 * 1000); // 10 min
+    let end = new Date(start - 0.01 * 3600 * 1000); // 10 min
     console.log(start, end);
     return new Promise((resolve, reject) => {
         axios.get(
-            `${covalent_url}/v1/${chainId}/block_v2/${end.toISOString()}/${start.toISOString()}/?key=${process.env.VUE_APP_COVALENT_KEY}`
+            `${covalent_url}/v1/${chainId}/block_v2/${end.toISOString()}/latest/?key=${process.env.VUE_APP_COVALENT_KEY}`
         ).then((result) => {
             resolve(result)
         })
